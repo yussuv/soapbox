@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import unicodeMapping from '../features/emoji/emoji_unicode_mapping_light';
-
-const assetHost = process.env.CDN_HOST || '';
+import { joinPublicPath } from 'soapbox/utils/static';
 
 export default class AutosuggestEmoji extends React.PureComponent {
 
@@ -23,7 +22,7 @@ export default class AutosuggestEmoji extends React.PureComponent {
         return null;
       }
 
-      url = `${assetHost}/emoji/${mapping.filename}.svg`;
+      url = joinPublicPath(`packs/emoji/${mapping.filename}.svg`);
     }
 
     return (

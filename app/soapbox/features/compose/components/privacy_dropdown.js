@@ -5,7 +5,7 @@ import IconButton from '../../../components/icon_button';
 import Overlay from 'react-overlays/lib/Overlay';
 import Motion from '../../ui/util/optional_motion';
 import spring from 'react-motion/lib/spring';
-import detectPassiveEvents from 'detect-passive-events';
+import { supportsPassiveEvents } from 'detect-passive-events';
 import classNames from 'classnames';
 import Icon from 'soapbox/components/icon';
 
@@ -21,7 +21,7 @@ const messages = defineMessages({
   change_privacy: { id: 'privacy.change', defaultMessage: 'Adjust post privacy' },
 });
 
-const listenerOptions = detectPassiveEvents.hasSupport ? { passive: true } : false;
+const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
 class PrivacyDropdownMenu extends React.PureComponent {
 
@@ -50,7 +50,7 @@ class PrivacyDropdownMenu extends React.PureComponent {
     const index = items.findIndex(item => {
       return (item.value === value);
     });
-    let element;
+    let element = null;
 
     switch(e.key) {
     case 'Escape':
@@ -60,33 +60,31 @@ class PrivacyDropdownMenu extends React.PureComponent {
       this.handleClick(e);
       break;
     case 'ArrowDown':
-      element = this.node.childNodes[index + 1];
-      if (element) {
-        element.focus();
-        this.props.onChange(element.getAttribute('data-index'));
-      }
+      element = this.node.childNodes[index + 1] || this.node.firstChild;
       break;
     case 'ArrowUp':
-      element = this.node.childNodes[index - 1];
-      if (element) {
-        element.focus();
-        this.props.onChange(element.getAttribute('data-index'));
+      element = this.node.childNodes[index - 1] || this.node.lastChild;
+      break;
+    case 'Tab':
+      if (e.shiftKey) {
+        element = this.node.childNodes[index - 1] || this.node.lastChild;
+      } else {
+        element = this.node.childNodes[index + 1] || this.node.firstChild;
       }
       break;
     case 'Home':
       element = this.node.firstChild;
-      if (element) {
-        element.focus();
-        this.props.onChange(element.getAttribute('data-index'));
-      }
       break;
     case 'End':
       element = this.node.lastChild;
-      if (element) {
-        element.focus();
-        this.props.onChange(element.getAttribute('data-index'));
-      }
       break;
+    }
+
+    if (element) {
+      element.focus();
+      this.props.onChange(element.getAttribute('data-index'));
+      e.preventDefault();
+      e.stopPropagation();
     }
   }
 
@@ -102,7 +100,7 @@ class PrivacyDropdownMenu extends React.PureComponent {
   componentDidMount() {
     document.addEventListener('click', this.handleDocumentClick, false);
     document.addEventListener('touchend', this.handleDocumentClick, listenerOptions);
-    if (this.focusedItem) this.focusedItem.focus();
+    if (this.focusedItem) this.focusedItem.focus({ preventScroll: true });
     this.setState({ mounted: true });
   }
 
@@ -192,6 +190,9 @@ class PrivacyDropdown extends React.PureComponent {
       }
     } else {
       const { top } = target.getBoundingClientRect();
+      if (this.state.open && this.activeElement) {
+        this.activeElement.focus();
+      }
       this.setState({ placement: top * 2 < innerHeight ? 'bottom' : 'top' });
       this.setState({ open: !this.state.open });
     }
@@ -214,7 +215,25 @@ class PrivacyDropdown extends React.PureComponent {
     }
   }
 
+  handleMouseDown = () => {
+    if (!this.state.open) {
+      this.activeElement = document.activeElement;
+    }
+  }
+
+  handleButtonKeyDown = (e) => {
+    switch(e.key) {
+    case ' ':
+    case 'Enter':
+      this.handleMouseDown();
+      break;
+    }
+  }
+
   handleClose = () => {
+    if (this.state.open && this.activeElement) {
+      this.activeElement.focus();
+    }
     this.setState({ open: false });
   }
 
@@ -240,6 +259,8 @@ class PrivacyDropdown extends React.PureComponent {
             active={open}
             inverted
             onClick={this.handleToggle}
+            onMouseDown={this.handleMouseDown}
+            onKeyDown={this.handleButtonKeyDown}
             style={{ height: null, lineHeight: '27px' }}
           />
         </div>

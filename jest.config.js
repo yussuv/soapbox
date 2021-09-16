@@ -30,4 +30,12 @@ module.exports = {
     '<rootDir>/node_modules',
     '<rootDir>/app',
   ],
+  'testEnvironment': 'jsdom',
+  'moduleNameMapper': {
+    '^.+.(css|styl|less|sass|scss|png|jpg|svg|ttf|woff|woff2)$': 'jest-transform-stub',
+  },
+  'transform': {
+    '\\.[jt]sx?$': 'babel-jest',
+    '.+\\.(css|styl|less|sass|scss|png|jpg|svg|ttf|woff|woff2)$': 'jest-transform-stub',
+  },
 };

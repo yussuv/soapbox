@@ -1,16 +1,17 @@
 // Note: You must restart bin/webpack-dev-server for changes to take effect
 console.log('Running in development mode'); // eslint-disable-line no-console
 
-const { resolve } = require('path');
+const { join } = require('path');
 const { merge } = require('webpack-merge');
 const sharedConfig = require('./shared');
-const { settings, output } = require('./configuration');
 
 const watchOptions = {};
 
 const backendUrl  = process.env.BACKEND_URL || 'http://localhost:4000';
 const patronUrl  = process.env.PATRON_URL || 'http://localhost:3037';
 const secureProxy = !(process.env.PROXY_HTTPS_INSECURE === 'true');
+
+const { FE_SUBDIRECTORY } = require(join(__dirname, '..', 'app', 'soapbox', 'build_config'));
 
 const backendEndpoints = [
   '/api',
@@ -21,11 +22,13 @@ const backendEndpoints = [
   '/auth/password',
   '/.well-known/webfinger',
   '/static',
-  '/emoji',
+  '/main/ostatus',
+  '/ostatus_subscribe',
+  '/favicon.png',
 ];
 
 const makeProxyConfig = () => {
-  let proxyConfig = {};
+  const proxyConfig = {};
   proxyConfig['/api/patron'] = {
     target: patronUrl,
     secure: secureProxy,
@@ -54,6 +57,7 @@ module.exports = merge(sharedConfig, {
   devtool: 'source-map',
 
   stats: {
+    preset: 'errors-warnings',
     errorDetails: true,
   },
 
@@ -61,37 +65,31 @@ module.exports = merge(sharedConfig, {
     pathinfo: true,
   },
 
+  watchOptions: Object.assign(
+    {},
+    { ignored: '**/node_modules/**' },
+    watchOptions,
+  ),
+
   devServer: {
-    clientLogLevel: 'none',
-    compress: settings.dev_server.compress,
-    quiet: settings.dev_server.quiet,
-    disableHostCheck: settings.dev_server.disable_host_check,
-    host: settings.dev_server.host,
-    port: settings.dev_server.port,
-    https: settings.dev_server.https,
-    hot: settings.dev_server.hmr,
-    contentBase: resolve(__dirname, '..', settings.public_root_path),
-    inline: settings.dev_server.inline,
-    useLocalIp: settings.dev_server.use_local_ip,
-    public: settings.dev_server.public,
-    publicPath: output.publicPath,
+    compress: true,
+    host: 'localhost',
+    port: 3036,
+    https: false,
+    hot: false,
     historyApiFallback: {
       disableDotRule: true,
+      index: join(FE_SUBDIRECTORY, '/'),
     },
-    headers: settings.dev_server.headers,
-    overlay: settings.dev_server.overlay,
-    stats: {
-      entrypoints: false,
-      errorDetails: false,
-      modules: false,
-      moduleTrace: false,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
     },
-    watchOptions: Object.assign(
-      {},
-      settings.dev_server.watch_options,
-      watchOptions,
-    ),
-    serveIndex: true,
+    client: {
+      overlay: true,
+    },
+    static: {
+      serveIndex: true,
+    },
     proxy: makeProxyConfig(),
   },
 });
