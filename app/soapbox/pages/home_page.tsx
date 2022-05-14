@@ -94,7 +94,7 @@ const HomePage: React.FC = ({ children }) => {
             {Component => <Component limit={10} />}
           </BundleContainer>
         )}
-        {features.suggestions && (
+        {(me && features.suggestions) && (
           <BundleContainer fetchComponent={WhoToFollowPanel}>
             {Component => <Component limit={5} />}
           </BundleContainer>

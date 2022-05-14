@@ -47,8 +47,9 @@ export function fetchSuggestionsV2(params = {}) {
 
 export function fetchSuggestions(params = { limit: 50 }) {
   return (dispatch, getState) => {
-    const state = getState();
-    const instance = state.get('instance');
+    const { me, instance } = getState();
+    if (!me) return;
+
     const features = getFeatures(instance);
 
     if (features.suggestionsV2) {
