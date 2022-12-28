@@ -394,7 +394,10 @@ const getInstanceFeatures = (instance: Instance) => {
      * Can see accounts' followers you know
      * @see GET /api/v1/accounts/familiar_followers
      */
-    familiarFollowers: v.software === MASTODON && gte(v.version, '3.5.0'),
+    familiarFollowers: any([
+      v.software === MASTODON && gte(v.version, '3.5.0'),
+      v.software === TAKAHE,
+    ]),
 
     /** Whether the instance federates. */
     federating: federation.get('enabled', true) === true, // Assume true unless explicitly false

@@ -9,7 +9,7 @@ import MissingIndicator from 'soapbox/components/missing-indicator';
 import StatusList from 'soapbox/components/status-list';
 import { Card, CardBody, Spinner, Text } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures, useSettings, useSoapboxConfig } from 'soapbox/hooks';
-import { makeGetStatusIds, findAccountByUsername } from 'soapbox/selectors';
+import { makeGetStatusIds, findAccountByFqn } from 'soapbox/selectors';
 
 const getStatusIds = makeGetStatusIds();
 
@@ -27,7 +27,7 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   const settings = useSettings();
   const soapboxConfig = useSoapboxConfig();
 
-  const account = useAppSelector(state => findAccountByUsername(state, params.username));
+  const account = useAppSelector(state => findAccountByFqn(state, params.username));
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
 
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;

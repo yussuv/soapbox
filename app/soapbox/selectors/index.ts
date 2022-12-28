@@ -85,6 +85,17 @@ export const findAccountByUsername = (state: RootState, username: string) => {
   }
 };
 
+export const findAccountByFqn = (state: RootState, fqn: string) => {
+  if (!fqn.includes('@')) {
+    const me = state.me;
+    const localDomain = state.accounts.get(me)?.fqn.split('@')[1] || state.instance.uri;
+
+    fqn = [fqn, localDomain].join('@');
+  }
+
+  return state.accounts.find(account => fqn.toLowerCase() === account?.fqn.toLowerCase());
+};
+
 const toServerSideType = (columnType: string): string => {
   switch (columnType) {
     case 'home':

@@ -12,7 +12,7 @@ import LoadMore from 'soapbox/components/load-more';
 import MissingIndicator from 'soapbox/components/missing-indicator';
 import { Column, Spinner } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures } from 'soapbox/hooks';
-import { getAccountGallery, findAccountByUsername } from 'soapbox/selectors';
+import { getAccountGallery, findAccountByFqn } from 'soapbox/selectors';
 
 import MediaItem from './components/media-item';
 
@@ -48,7 +48,7 @@ const AccountGallery = () => {
     if (accountFetchError) {
       accountId = null;
     } else {
-      const account = findAccountByUsername(state, username);
+      const account = findAccountByFqn(state, username);
       accountId = account ? (account.id || null) : -1;
       accountUsername = account?.acct || '';
     }

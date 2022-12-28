@@ -9,7 +9,7 @@ import MissingIndicator from 'soapbox/components/missing-indicator';
 import StatusList from 'soapbox/components/status-list';
 import { Column } from 'soapbox/components/ui';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
-import { findAccountByUsername } from 'soapbox/selectors';
+import { findAccountByFqn } from 'soapbox/selectors';
 
 const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },
@@ -29,7 +29,7 @@ const Favourites: React.FC<IFavourites> = (props) => {
   const ownAccount = useOwnAccount();
 
   const username = props.params?.username || '';
-  const account = useAppSelector(state => findAccountByUsername(state, username));
+  const account = useAppSelector(state => findAccountByFqn(state, username));
   const isOwnAccount = username.toLowerCase() === ownAccount?.username?.toLowerCase();
 
   const timelineKey = isOwnAccount ? 'favourites' : `favourites:${account?.id}`;

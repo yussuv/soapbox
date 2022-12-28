@@ -16,8 +16,8 @@ import {
   PinnedAccountsPanel,
 } from 'soapbox/features/ui/util/async-components';
 import { useAppSelector, useFeatures, useSoapboxConfig } from 'soapbox/hooks';
-import { findAccountByUsername, makeGetAccount } from 'soapbox/selectors';
-import { getAcct, isLocal } from 'soapbox/utils/accounts';
+import { findAccountByFqn, makeGetAccount } from 'soapbox/selectors';
+import { getAcct, isLocalByFqn } from 'soapbox/utils/accounts';
 
 interface IProfilePage {
   params?: {
@@ -34,7 +34,7 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
 
   const account = useAppSelector(state => {
     if (username) {
-      const account = findAccountByUsername(state, username);
+      const account = findAccountByFqn(state, username);
       if (account) {
         return getAccount(state, account.id) || undefined;
       }
@@ -42,11 +42,12 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
   });
 
   const me = useAppSelector(state => state.me);
+  const isLocal = useAppSelector(state => account && (isLocalByFqn(account, state)));
   const features = useFeatures();
   const { displayFqn } = useSoapboxConfig();
 
   // Fix case of username
-  if (account && account.acct !== username) {
+  if (account && (isLocal ? account.acct : account.fqn) !== username) {
     return <Redirect to={`/@${account.acct}`} />;
   }
 
@@ -133,7 +134,7 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
             {Component => <Component account={account} />}
           </BundleContainer>
         )}
-        {(features.accountEndorsements && account && isLocal(account)) ? (
+        {(features.accountEndorsements && account && isLocal) ? (
           <BundleContainer fetchComponent={PinnedAccountsPanel}>
             {Component => <Component account={account} limit={5} key='pinned-accounts-panel' />}
           </BundleContainer>

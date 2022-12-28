@@ -1,3 +1,4 @@
+import type { RootState } from 'soapbox/store';
 import type { Account } from 'soapbox/types/entities';
 
 const getDomainFromURL = (account: Account): string => {
@@ -29,6 +30,12 @@ export const getAcct = (account: Account, displayFqn: boolean): string => (
 export const isLocal = (account: Account): boolean => {
   const domain: string = account.acct.split('@')[1];
   return domain === undefined ? true : false;
+};
+
+export const isLocalByFqn = (account: Account, state: RootState) => {
+  const localDomain = state.accounts.get(state.me)?.fqn.split('@')[1] || state.instance.uri;
+
+  return account.fqn.toLocaleLowerCase() === [account.acct, localDomain].join('@').toLocaleLowerCase();
 };
 
 export const isRemote = (account: Account): boolean => !isLocal(account);

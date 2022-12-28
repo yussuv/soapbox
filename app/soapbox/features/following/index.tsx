@@ -14,7 +14,7 @@ import ScrollableList from 'soapbox/components/scrollable-list';
 import { Column, Spinner } from 'soapbox/components/ui';
 import AccountContainer from 'soapbox/containers/account-container';
 import { useAppDispatch, useAppSelector, useFeatures, useOwnAccount } from 'soapbox/hooks';
-import { findAccountByUsername } from 'soapbox/selectors';
+import { findAccountByFqn } from 'soapbox/selectors';
 
 const messages = defineMessages({
   heading: { id: 'column.following', defaultMessage: 'Following' },
@@ -36,7 +36,7 @@ const Following: React.FC<IFollowing> = (props) => {
   const [loading, setLoading] = useState(true);
 
   const username = props.params?.username || '';
-  const account = useAppSelector(state => findAccountByUsername(state, username));
+  const account = useAppSelector(state => findAccountByFqn(state, username));
   const isOwnAccount = username.toLowerCase() === ownAccount?.username?.toLowerCase();
 
   const accountIds = useAppSelector(state => state.user_lists.following.get(account!?.id)?.items || ImmutableOrderedSet<string>());
