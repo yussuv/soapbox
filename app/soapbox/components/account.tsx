@@ -177,7 +177,7 @@ const Account = ({
             wrapper={(children) => <HoverRefWrapper className='relative' accountId={account.id} inline>{children}</HoverRefWrapper>}
           >
             <LinkEl
-              to={`/@${account.acct}`}
+              to={`/@${account.username_or_fqn}`}
               title={account.acct}
               onClick={(event: React.MouseEvent) => event.stopPropagation()}
             >
@@ -197,7 +197,7 @@ const Account = ({
               wrapper={(children) => <HoverRefWrapper accountId={account.id} inline>{children}</HoverRefWrapper>}
             >
               <LinkEl
-                to={`/@${account.acct}`}
+                to={`/@${account.username_or_fqn}`}
                 title={account.acct}
                 onClick={(event: React.MouseEvent) => event.stopPropagation()}
               >

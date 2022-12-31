@@ -32,7 +32,7 @@ const buildLink = (account: Account): JSX.Element => (
     <Link
       className='text-gray-800 dark:text-gray-200 font-bold hover:underline'
       title={account.acct}
-      to={`/@${account.acct}`}
+      to={`/@${account.username_or_fqn}`}
       dangerouslySetInnerHTML={{ __html: account.display_name_html }}
     />
   </bdi>
@@ -191,7 +191,7 @@ const Notification: React.FC<INotificaton> = (props) => {
 
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
-      history.push(`/@${account.acct}/posts/${status.id}`);
+      history.push(`/@${account.username_or_fqn}/posts/${status.id}`);
     } else {
       handleOpenProfile();
     }
@@ -199,7 +199,7 @@ const Notification: React.FC<INotificaton> = (props) => {
 
   const handleOpenProfile = () => {
     if (account && typeof account === 'object') {
-      history.push(`/@${account.acct}`);
+      history.push(`/@${account.username_or_fqn}`);
     }
   };
 

@@ -38,7 +38,7 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
   return (
     <div className='account'>
       <div className='account__wrapper'>
-        <Link className='account__display-name' title={account.get('acct')} to={`/@${account.get('acct')}`}>
+        <Link className='account__display-name' title={account.acct} to={`/@${account.username_or_fqn}`}>
           <div className='account__display-name'>
             <div className='account__avatar-wrapper'><Avatar account={account} size={36} /></div>
             <DisplayName account={account} />

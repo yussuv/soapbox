@@ -20,7 +20,7 @@ const VideoModal: React.FC<IVideoModal> = ({ status, account, media, time, onClo
   const handleStatusClick: React.MouseEventHandler = e => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      history.push(`/@${account.acct}/posts/${status.id}`);
+      history.push(`/@${account.username_or_fqn}/posts/${status.id}`);
     }
   };
 

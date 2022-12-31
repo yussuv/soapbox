@@ -21,7 +21,7 @@ const SuggestionItem = ({ accountId }: { accountId: string }) => {
   return (
     <Stack space={3} className='p-4 md:p-0 rounded-md border border-solid border-gray-300 dark:border-gray-800 dark:md:border-transparent md:border-transparent w-52 shrink-0 md:shrink md:w-full'>
       <Link
-        to={`/@${account.acct}`}
+        to={`/@${account.username_or_fqn}`}
         title={account.acct}
       >
         <Stack space={3} className='w-40 md:w-24 mx-auto'>

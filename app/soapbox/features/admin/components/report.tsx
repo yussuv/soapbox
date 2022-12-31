@@ -79,8 +79,8 @@ const Report: React.FC<IReport> = ({ id }) => {
   const menu = makeMenu();
   const statuses = report.statuses as ImmutableList<Status>;
   const statusCount = statuses.count();
-  const acct = targetAccount.acct as string;
-  const reporterAcct = account.acct as string;
+  const acct = targetAccount.username_or_fqn;
+  const reporterAcct = account.username_or_fqn;
 
   return (
     <HStack space={3} className='p-3' key={report.id}>

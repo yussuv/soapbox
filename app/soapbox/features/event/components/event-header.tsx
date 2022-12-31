@@ -414,7 +414,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 defaultMessage='Organized by {name}'
                 values={{
                   name: (
-                    <Link className='mention inline-block' to={`/@${account.acct}`}>
+                    <Link className='mention inline-block' to={`/@${account.username_or_fqn}`}>
                       <HStack space={1} alignItems='center' grow>
                         <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />
                         {account.verified && <VerificationBadge />}

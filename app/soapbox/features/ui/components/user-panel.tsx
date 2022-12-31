@@ -28,7 +28,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
   if (!account) return null;
   const displayNameHtml = { __html: account.get('display_name_html') };
-  const acct = !account.get('acct').includes('@') && domain ? `${account.get('acct')}@${domain}` : account.get('acct');
+  const acct = !account.acct.includes('@') && domain ? `${account.acct}@${domain}` : account.acct;
   const header = account.get('header');
   const verified = account.get('verified');
 
@@ -44,7 +44,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
           <HStack justifyContent='between'>
             <Link
-              to={`/@${account.get('acct')}`}
+              to={`/@${account.get('username_or_fqn')}`}
               title={acct}
               className='-mt-12 block'
             >
@@ -61,7 +61,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         </Stack>
 
         <Stack>
-          <Link to={`/@${account.get('acct')}`}>
+          <Link to={`/@${account.username_or_fqn}`}>
             <HStack space={1} alignItems='center'>
               <Text size='lg' weight='bold' dangerouslySetInnerHTML={displayNameHtml} />
 
@@ -82,10 +82,10 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
         <HStack alignItems='center' space={3}>
           {account.get('followers_count') >= 0 && (
-            <Link to={`/@${account.get('acct')}/followers`} title={intl.formatNumber(account.get('followers_count'))}>
+            <Link to={`/@${account.username_or_fqn}/followers`} title={intl.formatNumber(account.followers_count)}>
               <HStack alignItems='center' space={1}>
                 <Text theme='primary' weight='bold' size='sm'>
-                  {shortNumberFormat(account.get('followers_count'))}
+                  {shortNumberFormat(account.followers_count)}
                 </Text>
                 <Text weight='bold' size='sm'>
                   <FormattedMessage id='account.followers' defaultMessage='Followers' />
@@ -95,7 +95,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
           )}
 
           {account.get('following_count') >= 0 && (
-            <Link to={`/@${account.get('acct')}/following`} title={intl.formatNumber(account.get('following_count'))}>
+            <Link to={`/@${account.username_or_fqn}/following`} title={intl.formatNumber(account.following_count)}>
               <HStack alignItems='center' space={1}>
                 <Text theme='primary' weight='bold' size='sm'>
                   {shortNumberFormat(account.get('following_count'))}

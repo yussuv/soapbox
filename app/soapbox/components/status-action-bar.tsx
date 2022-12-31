@@ -248,7 +248,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   };
 
   const handleOpen: React.EventHandler<React.MouseEvent> = (e) => {
-    history.push(`/@${status.getIn(['account', 'acct'])}/posts/${status.id}`);
+    history.push(`/@${status.getIn(['account', 'username_or_fqn'])}/posts/${status.id}`);
   };
 
   const handleEmbed = () => {

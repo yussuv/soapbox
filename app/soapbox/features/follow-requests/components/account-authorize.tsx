@@ -43,7 +43,7 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   return (
     <div className='account-authorize__wrapper'>
       <div className='account-authorize'>
-        <Link to={`/@${account.acct}`}>
+        <Link to={`/@${account.username_or_fqn}`}>
           <div className='account-authorize__avatar'><Avatar account={account} size={48} /></div>
           <DisplayName account={account} />
         </Link>

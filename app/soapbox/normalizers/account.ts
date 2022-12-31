@@ -66,6 +66,7 @@ export const AccountRecord = ImmutableRecord({
   relationship: null as Relationship | null,
   should_refetch: false,
   staff: false,
+  username_or_fqn: '',
 });
 
 // https://docs.joinmastodon.org/entities/field/
@@ -210,6 +211,10 @@ const addInternalFields = (account: ImmutableMap<string, any>) => {
         });
       });
     });
+
+    // Set acct as the default for username_or_fqn
+
+    account.set('username_or_fqn', account.get('acct'));
   });
 };
 

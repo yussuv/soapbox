@@ -7,7 +7,7 @@ import {
 import { createSelector } from 'reselect';
 
 import { getSettings } from 'soapbox/actions/settings';
-import { getDomain } from 'soapbox/utils/accounts';
+import { getDomain, isLocalByFqn } from 'soapbox/utils/accounts';
 import { validId } from 'soapbox/utils/auth';
 import ConfigDB from 'soapbox/utils/config-db';
 import { shouldFilter } from 'soapbox/utils/timelines';
@@ -18,15 +18,22 @@ import type { Filter as FilterEntity, Notification } from 'soapbox/types/entitie
 
 const normalizeId = (id: any): string => typeof id === 'string' ? id : '';
 
-const getAccountBase         = (state: RootState, id: string) => state.accounts.get(id);
-const getAccountCounters     = (state: RootState, id: string) => state.accounts_counters.get(id);
-const getAccountRelationship = (state: RootState, id: string) => state.relationships.get(id);
-const getAccountMoved        = (state: RootState, id: string) => state.accounts.get(state.accounts.get(id)?.moved || '');
-const getAccountMeta         = (state: RootState, id: string) => state.accounts_meta.get(id);
-const getAccountAdminData    = (state: RootState, id: string) => state.admin.users.get(id);
-const getAccountPatron       = (state: RootState, id: string) => {
+const getAccountBase          = (state: RootState, id: string) => state.accounts.get(id);
+const getAccountCounters      = (state: RootState, id: string) => state.accounts_counters.get(id);
+const getAccountRelationship  = (state: RootState, id: string) => state.relationships.get(id);
+const getAccountMoved         = (state: RootState, id: string) => state.accounts.get(state.accounts.get(id)?.moved || '');
+const getAccountMeta          = (state: RootState, id: string) => state.accounts_meta.get(id);
+const getAccountAdminData     = (state: RootState, id: string) => state.admin.users.get(id);
+const getAccountPatron        = (state: RootState, id: string) => {
   const url = state.accounts.get(id)?.url;
   return url ? state.patron.accounts.get(url) : null;
+};
+const getAccountUsernameOrFqn = (state: RootState, id: string) => {
+  const account = state.accounts.get(id);
+
+  if (!account) return null;
+
+  return isLocalByFqn(account, state) ? account.acct : account.fqn;
 };
 
 export const makeGetAccount = () => {
@@ -38,7 +45,8 @@ export const makeGetAccount = () => {
     getAccountMeta,
     getAccountAdminData,
     getAccountPatron,
-  ], (base, counters, relationship, moved, meta, admin, patron) => {
+    getAccountUsernameOrFqn,
+  ], (base, counters, relationship, moved, meta, admin, patron, usernameOrFqn) => {
     if (!base) return null;
 
     return base.withMutations(map => {
@@ -51,6 +59,7 @@ export const makeGetAccount = () => {
       map.set('moved', moved || null);
       map.set('patron', patron || null);
       map.setIn(['pleroma', 'admin'], admin);
+      if (usernameOrFqn) map.set('username_or_fqn', usernameOrFqn);
     });
   });
 };

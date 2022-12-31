@@ -285,7 +285,7 @@ const Thread: React.FC<IThread> = (props) => {
   };
 
   const handleHotkeyOpenProfile = () => {
-    history.push(`/@${status!.getIn(['account', 'acct'])}`);
+    history.push(`/@${status!.getIn(['account', 'username_or_fqn'])}`);
   };
 
   const handleHotkeyToggleHidden = () => {
@@ -427,7 +427,7 @@ const Thread: React.FC<IThread> = (props) => {
 
   if (status?.event) {
     return (
-      <Redirect to={`/@${status.getIn(['account', 'acct'])}/events/${status.id}`} />
+      <Redirect to={`/@${status.getIn(['account', 'username_or_fqn'])}/events/${status.id}`} />
     );
   }
 

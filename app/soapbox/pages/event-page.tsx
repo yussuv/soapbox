@@ -35,7 +35,7 @@ const EventPage: React.FC<IEventPage> = ({ params, children }) => {
   const event = status?.event;
 
   if (status && !event) {
-    history.push(`/@${status.getIn(['account', 'acct'])}/posts/${status.id}`);
+    history.push(`/@${status.getIn(['account', 'username_or_fqn'])}/posts/${status.id}`);
     return (
       <PlaceholderStatus />
     );
@@ -47,12 +47,12 @@ const EventPage: React.FC<IEventPage> = ({ params, children }) => {
   const tabs = status ? [
     {
       text: 'Information',
-      to: `/@${status.getIn(['account', 'acct'])}/events/${status.id}`,
+      to: `/@${status.getIn(['account', 'username_or_fqn'])}/events/${status.id}`,
       name: 'info',
     },
     {
       text: 'Discussion',
-      to: `/@${status.getIn(['account', 'acct'])}/events/${status.id}/discussion`,
+      to: `/@${status.getIn(['account', 'username_or_fqn'])}/events/${status.id}/discussion`,
       name: 'discussion',
     },
   ] : [];

@@ -45,7 +45,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
 
   const accounts: Array<React.ReactNode> = familiarFollowers.map(account => !!account && (
     <HoverRefWrapper accountId={account.id} inline>
-      <Link className='mention' to={`/@${account.acct}`}>
+      <Link className='mention' to={`/@${account.username_or_fqn}`}>
         <span dangerouslySetInnerHTML={{ __html: account.display_name_html }} />
 
         {account.verified && <VerificationBadge />}

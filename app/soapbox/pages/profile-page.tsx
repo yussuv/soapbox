@@ -47,8 +47,8 @@ const ProfilePage: React.FC<IProfilePage> = ({ params, children }) => {
   const { displayFqn } = useSoapboxConfig();
 
   // Fix case of username
-  if (account && (isLocal ? account.acct : account.fqn) !== username) {
-    return <Redirect to={`/@${account.acct}`} />;
+  if (account && account.username_or_fqn !== username) {
+    return <Redirect to={`/@${account.username_or_fqn}`} />;
   }
 
   const tabItems = [

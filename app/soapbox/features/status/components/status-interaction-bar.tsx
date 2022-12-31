@@ -88,7 +88,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const navigateToQuotes: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    history.push(`/@${status.getIn(['account', 'acct'])}/posts/${status.id}/quotes`);
+    history.push(`/@${status.getIn(['account', 'username_or_fqn'])}/posts/${status.id}/quotes`);
   };
 
   const getQuotes = () => {

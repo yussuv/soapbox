@@ -87,7 +87,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const actualStatus = getActualStatus(status);
 
-  const statusUrl = `/@${actualStatus.getIn(['account', 'acct'])}/posts/${actualStatus.id}`;
+  const statusUrl = `/@${actualStatus.getIn(['account', 'username_or_fqn'])}`;
 
   // Track height changes we know about to compensate scrolling.
   useEffect(() => {
@@ -171,7 +171,7 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyOpenProfile = (): void => {
-    history.push(`/@${actualStatus.getIn(['account', 'acct'])}`);
+    history.push(`/@${actualStatus.getIn(['account', 'username_or_fqn'])}`);
   };
 
   const handleHotkeyMoveUp = (e?: KeyboardEvent): void => {
@@ -235,7 +235,7 @@ const Status: React.FC<IStatus> = (props) => {
 
     reblogElement = (
       <NavLink
-        to={`/@${status.getIn(['account', 'acct'])}`}
+        to={`/@${actualStatus.getIn(['account', 'username_or_fqn'])}`}
         onClick={(event) => event.stopPropagation()}
         className='hidden sm:flex items-center text-gray-700 dark:text-gray-600 text-xs font-medium space-x-1 rtl:space-x-reverse hover:underline'
       >
@@ -258,7 +258,7 @@ const Status: React.FC<IStatus> = (props) => {
     reblogElementMobile = (
       <div className='pb-5 -mt-2 sm:hidden truncate'>
         <NavLink
-          to={`/@${status.getIn(['account', 'acct'])}`}
+          to={`/@${actualStatus.getIn(['account', 'username_or_fqn'])}`}
           onClick={(event) => event.stopPropagation()}
           className='flex items-center text-gray-700 dark:text-gray-600 text-xs font-medium space-x-1 hover:underline'
         >

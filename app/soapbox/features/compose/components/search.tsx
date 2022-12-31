@@ -19,14 +19,16 @@ import { Input } from 'soapbox/components/ui';
 import SvgIcon from 'soapbox/components/ui/icon/svg-icon';
 import { useAppSelector } from 'soapbox/hooks';
 
+import type { RootState } from 'soapbox/store';
+
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
 function redirectToAccount(accountId: string, routerHistory: any) {
-  return (_dispatch: any, getState: () => ImmutableMap<string, any>) => {
-    const acct = getState().getIn(['accounts', accountId, 'acct']);
+  return (_dispatch: any, getState: () => RootState) => {
+    const acct = getState().accounts.get(accountId)?.username_or_fqn;
 
     if (acct && routerHistory) {
       routerHistory.push(`/@${acct}`);
